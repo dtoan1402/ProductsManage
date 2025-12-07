@@ -1,0 +1,205 @@
+{
+  "info": {
+    "name": "Product Management API",
+    "description": "Product Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET - List products (paging + filtering)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/products?page=1&limit=10&search=&status=active&categoryId=&minPrice=&maxPrice=",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "products" ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Current page"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Number of records per page"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Search by name or description"
+            },
+            {
+              "key": "status",
+              "value": "active",
+              "description": "Filter by status: active, inactive, discontinued"
+            },
+            {
+              "key": "categoryId",
+              "value": "",
+              "description": "Category ID"
+            },
+            {
+              "key": "minPrice",
+              "value": "",
+              "description": "Minimum price"
+            },
+            {
+              "key": "maxPrice",
+              "value": "",
+              "description": "Maximum price"
+            }
+          ]
+        },
+        "description": "Retrieve a paginated list of products with optional filters"
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Get product by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/products/{{product_id}}",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "products", "{{product_id}}" ]
+        },
+        "description": "Retrieve detailed information of a single product"
+      },
+      "response": []
+    },
+    {
+      "name": "POST - Create new product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "    const res = pm.response.json();",
+              "    pm.environment.set('product_id', res.id);",
+              "    console.log('Saved product_id:', res.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"MacBook Pro 16\",\n  \"description\": \"M3 Pro Chip, 32GB RAM\",\n  \"price\": 2499.99,\n  \"stockQuantity\": 30,\n  \"categoryId\": 2,\n  \"status\": \"active\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/products",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "products" ]
+        },
+        "description": "Create a new product. On success, the product ID is saved to the `product_id` environment variable."
+      },
+      "response": []
+    },
+    {
+      "name": "PUT - Update product",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"MacBook Pro 16 (Updated)\",\n  \"price\": 2399.99,\n  \"stockQuantity\": 25,\n  \"status\": \"active\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/products/{{product_id}}",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "products", "{{product_id}}" ]
+        },
+        "description": "Update one or more fields of an existing product"
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE - Delete product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/products/{{product_id}}",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "products", "{{product_id}}" ]
+        },
+        "description": "Delete product successfully"
+      },
+      "response": []
+    },
+    {
+      "name": "TEST - Validation error (missing name)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 100,\n  \"stockQuantity\": 10,\n  \"status\": \"active\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/products",
+          "host": [ "{{base_url}}" ],
+          "path": [ "api", "products" ]
+        },
+        "description": "Test validation: missing required field 'name'"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [ "" ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [ "" ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Base URL of the backend API"
+    },
+    {
+      "key": "product_id",
+      "value": "",
+      "type": "string",
+      "description": "ID of the last created product (auto-filled by POST request)"
+    }
+  ]
+}

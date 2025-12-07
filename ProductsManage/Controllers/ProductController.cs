@@ -48,7 +48,10 @@ namespace ProductsManage.Controllers
                 query = query.Where(p => p.Status == status);
 
             var total = await query.CountAsync();
-            var items = await query.OrderBy(p => p.Id).Skip((page - 1) * limit).Take(limit).ToListAsync();
+            var items = await query.OrderBy(p => p.Id)
+                                   .Skip((page - 1) * limit)
+                                   .Take(limit)
+                                   .ToListAsync();
 
             var dtos = _mapper.Map<List<ProductResponseDto>>(items);
 
