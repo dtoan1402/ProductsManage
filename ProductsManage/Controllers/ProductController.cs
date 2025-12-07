@@ -20,6 +20,7 @@ namespace ProductsManage.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Client)]
         public async Task<ActionResult<PagedResult<ProductResponseDto>>> GetProducts(
         [FromQuery] int page = 1,
         [FromQuery] int limit = 10,
